@@ -1,6 +1,3 @@
-# leaflet-xserver
-Leaflet classes for extended PTV xServer functionalities
-
 leaflet-xserver provides classes to add xMapServer specific features to Leaflet.
 
 ### L.TileLayer.ClickableTiles
