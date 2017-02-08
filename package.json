@@ -1,7 +1,7 @@
 {
   "name": "leaflet-xserver",
-  "version": "0.9.1",
-  "description": "Advanced Leaflet classes for PTV xServer",
+  "version": "0.9.3",
+  "description": "Extended Leaflet classes for PTV xServer",
   "files": ["dist"],
   "main": "dist/leaflet-xserver-src.js",
   "directories": {
@@ -36,9 +36,9 @@
     "leaflet": "global:L"
   },
   "dependencies": {
-    "leaflet": "^1.0.2",
+    "leaflet": "^1.0.3",
     "corslite": "^0.0.7",
-	"leaflet.nontiledlayer": "^1.0.3"
+	  "leaflet.nontiledlayer": "^1.0.3"
   },
   "devDependencies": {
     "browserify": "^13.1.0",

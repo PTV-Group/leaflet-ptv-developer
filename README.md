@@ -1,6 +1,6 @@
 leaflet-xserver provides classes to add xMapServer specific features to Leaflet.
 
-### L.TileLayer.ClickableTiles
+### L.TileLayer.ClickableTiles / L.TileLayer.ClickableTiles07
 
 The Layer class `L.TileLayer.ClickableTiles` can be used to make xServer elements clickable. To use this layer, include the file `TileLayer.ClickableTiles.js` for the corresponding Leaflet version.
 
@@ -13,15 +13,16 @@ The easiest way to add a clickable layer is to use the new `ClickableTiles` laye
 var map = L.map('map').setView(new L.LatLng(49.01405, 8.4044), 14);
 
 var interactiveTileLayer = L.TileLayer.clickableTiles(
-    'https://s0{s}-xserver2-europe-test.cloud.ptvgroup.com/services/rest/XMap/tile/{z}/{x}/{y}/' +
-    '{profile}+PTV_TruckAttributes/json?xtok={token}',
-    {       
+    'https://s0{s}-xserver2-europe-test.cloud.ptvgroup.com/services/rest/XMap/tile/{z}/{x}/{y}' +
+    '?storedProfile={profile}&layers=background,transport,labels,PTV_TruckAttributes&contentType=json&xtok={token}',
+    {
         profile: 'silkysand',
-        token: token,       
+        token: window.token,
         attribution: '<a target="_blank" href="http://www.ptvgroup.com">PTV</a>, TOMTOM',
         subdomains: '1234',
-        maxZoom: 22
-}).addTo(map);
+        maxZoom: 22,
+        pane: 'tilePane'
+    }).addTo(map);
 ```
 
 #### As layered map
@@ -36,11 +37,11 @@ var radius = 250; // m
 var map = L.map('map').setView(coordinate, 14);
 
 var basemapLayer = L.tileLayer(
-      'https://s0{s}-xserver2-europe-test.cloud.ptvgroup.com/services/rest/XMap/tile/{z}/{x}/{y}/' +
-      '{profile}?xtok={token}',
-      {
+    'https://s0{s}-xserver2-europe-test.cloud.ptvgroup.com/services/rest/XMap/tile/{z}/{x}/{y}' +
+    '?storedProfile={profile}&xtok={token}',
+    {
         profile: 'silkysand',
-        token: token,
+        token: window.token,
         attribution: '<a target="_blank" href="http://www.ptvgroup.com">PTV</a>, TOMTOM',
         subdomains: '1234',
         maxZoom: 22,
@@ -55,17 +56,19 @@ var circle = L.circle(coordinate, radius / Math.cos(coordinate.lng / 2 / Math.PI
     }).addTo(map).bindPopup("I am a circle.");
 
 var truckAttributesLayer = L.TileLayer.clickableTiles(
-    'https://s0{s}-xserver2-europe-test.cloud.ptvgroup.com/services/rest/XMap/tile/{z}/{x}/{y}/' +
-    '{profile}-background-transport-labels+PTV_TruckAttributes/json?xtok={token}',
+    'https://s0{s}-xserver2-europe-test.cloud.ptvgroup.com/services/rest/XMap/tile/{z}/{x}/{y}' +
+    '?storedProfile={profile}&layers=PTV_TruckAttributes&contentType=json&xtok={token}',
     {
         profile: 'silkysand',
-        token: token,
+        token: window.token,
         attribution: '<a target="_blank" href="http://www.ptvgroup.com">PTV</a>, TOMTOM',
         subdomains: '1234',
         maxZoom: 22,
-        pane: 'shadowPane'
+        pane: 'clickableTiles'
     }).addTo(map);
 ```
+
+leaflet-xserver also has a specific `L.TileLayer.ClickableTiles07` class for backard-compatibility with Leaflet 0.7.x.
 
 ### L.NonTiledLayer, L.NonTiledLayer.WMS
 

@@ -3,7 +3,7 @@ module.exports = function(grunt) {
 		pkg: grunt.file.readJSON('package.json'),
 		browserify: {
 			control: {
-				src: ['src/TileLayer.ClickableTiles.js'],
+				src: ['src/TileLayer.ClickableTiles.js', 'src/TileLayer.ClickableTiles07.js'],
 				dest: 'dist/leaflet-xserver-src.js',
 				options: {
 					transform: [
