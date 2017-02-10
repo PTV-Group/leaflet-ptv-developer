@@ -253,8 +253,8 @@ L.TileLayer.ClickableTiles07 = L.TileLayer.extend({
     }
 });
 
-L.TileLayer.clickableTiles07 = function (url, options) {
+L.tileLayer.clickableTiles07 = function (url, options) {
     return new L.TileLayer.ClickableTiles07(url, options);
 };
 
-module.exports = L.TileLayer.ClickableTiles07;
+module.exports = L.tileLayer.clickableTiles07;
