@@ -295,8 +295,8 @@ L.TileLayer.ClickableTiles = L.TileLayer.extend({
     }
 });
 
-L.TileLayer.clickableTiles = function (url, options) {
+L.tileLayer.clickableTiles = function (url, options) {
     return new L.TileLayer.ClickableTiles(url, options);
 };
 
-module.exports = L.TileLayer.ClickableTiles;
+module.exports = L.tileLayer.ClickableTiles;

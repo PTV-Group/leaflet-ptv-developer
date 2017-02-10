@@ -68,7 +68,7 @@ var truckAttributesLayer = L.TileLayer.clickableTiles(
     }).addTo(map);
 ```
 
-leaflet-xserver also has a specific `L.TileLayer.ClickableTiles07` class for backard-compatibility with Leaflet 0.7.x.
+leaflet-xserver also has a specific `L.TileLayer.ClickableTiles07` class for bawckard-compatibility with Leaflet 0.7.x.
 
 ### L.NonTiledLayer, L.NonTiledLayer.WMS
 
