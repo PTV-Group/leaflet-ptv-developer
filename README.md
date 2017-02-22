@@ -1,20 +1,20 @@
 leaflet-xserver provides classes to add xMapServer specific features to Leaflet.
 
-### L.TileLayer.ClickableTiles / L.TileLayer.ClickableTiles07
+### L.TileLayer.XServer
 
-The Layer class `L.TileLayer.ClickableTiles` can be used to make xServer elements clickable. To use this layer, include the file `TileLayer.ClickableTiles.js` for the corresponding Leaflet version.
+The Layer class `L.TileLayer.XServer` can be used to make xServer elements clickable. 
 
 #### As single map
 [Demo](https://ptv-logistics.github.io/xserverjs/boilerplate/Leaflet-Clickable.1.0.html)
 
-The easiest way to add a clickable layer is to use the new `ClickableTiles` layer and append a clickable xServer-Layer (`PTV_TruckAttributes`) to the profile. The icons of the layer can now be clicked to display the object information. The options are the same as for `L.TileLayer`
+The easiest way to add a clickable layer is to use the new `TileLayerXServer` and append a clickable xServer-Layer (`PTV_TruckAttributes`) to the profile. The icons of the layer can now be clicked to display the object information. The options are the same as for `L.TileLayer`
 
 ```javascript
 var map = L.map('map').setView(new L.LatLng(49.01405, 8.4044), 14);
 
-var interactiveTileLayer = L.TileLayer.clickableTiles(
+var interactiveTileLayer = L.tileLayer.xserver(
     'https://s0{s}-xserver2-europe-test.cloud.ptvgroup.com/services/rest/XMap/tile/{z}/{x}/{y}' +
-    '?storedProfile={profile}&layers=background,transport,labels,PTV_TruckAttributes&contentType=json&xtok={token}',
+    '?storedProfile={profile}&layers=background,transport,labels,PTV_TruckAttributes&contentType=JSON&xtok={token}',
     {
         profile: 'silkysand',
         token: window.token,
@@ -55,9 +55,9 @@ var circle = L.circle(coordinate, radius / Math.cos(coordinate.lng / 2 / Math.PI
         pane: 'overlayPane'
     }).addTo(map).bindPopup("I am a circle.");
 
-var truckAttributesLayer = L.TileLayer.clickableTiles(
+var truckAttributesLayer = L.tlieLayer.xserver(
     'https://s0{s}-xserver2-europe-test.cloud.ptvgroup.com/services/rest/XMap/tile/{z}/{x}/{y}' +
-    '?storedProfile={profile}&layers=PTV_TruckAttributes&contentType=json&xtok={token}',
+    '?storedProfile={profile}&layers=PTV_TruckAttributes&contentType=JSON&xtok={token}',
     {
         profile: 'silkysand',
         token: window.token,
@@ -68,7 +68,7 @@ var truckAttributesLayer = L.TileLayer.clickableTiles(
     }).addTo(map);
 ```
 
-leaflet-xserver also has a specific `L.TileLayer.ClickableTiles07` class for bawckard-compatibility with Leaflet 0.7.x.
+leaflet-xserver also has a specific `L.TileLayer.ClickableTiles07` class for bawckward-compatibility with Leaflet 0.7.x.
 
 ### L.NonTiledLayer, L.NonTiledLayer.WMS
 

@@ -4,7 +4,7 @@ var L = require('leaflet'),
     corslite = require('corslite'),
 	nontiledlayer = require('leaflet.nontiledlayer');
 
-L.TileLayer.ClickableTiles = L.TileLayer.extend({
+L.TileLayer.XServer = L.TileLayer.extend({
     includes: L.Mixin.Events,
 
     initialize: function (url, options) {
@@ -295,8 +295,12 @@ L.TileLayer.ClickableTiles = L.TileLayer.extend({
     }
 });
 
-L.tileLayer.clickableTiles = function (url, options) {
-    return new L.TileLayer.ClickableTiles(url, options);
+L.tileLayer.xserver = function (url, options) {
+    if(url.indexOf("contentType=JSON") !== -1) {
+        return new L.TileLayer.XServer(url, options);
+    } else {
+        return new L.TileLayer(url, options)
+    }
 };
 
-module.exports = L.tileLayer.ClickableTiles;
+module.exports = L.tileLayer.xserver;
