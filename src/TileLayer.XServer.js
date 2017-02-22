@@ -1,4 +1,4 @@
-﻿"use strict";
+"use strict";
 
 var L = require('leaflet'),
     corslite = require('corslite'),
