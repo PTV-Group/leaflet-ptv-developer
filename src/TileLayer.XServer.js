@@ -1,7 +1,7 @@
 "use strict";
 
 var L = require('leaflet'),
-    corslite = require('corslite'),
+    superagent = require('superagent'),
 	nontiledlayer = require('leaflet.nontiledlayer');
 
 L.TileLayer.XServer = L.TileLayer.extend({
@@ -91,8 +91,8 @@ L.TileLayer.XServer = L.TileLayer.extend({
         var that = this;
         var queueId = this.queueId;
 
-        var request = corslite(url,
-            function (err, resp) {
+        var request = superagent.get(url)
+            .end(function (err, resp) {
                 that.activeRequests.splice(that.activeRequests.indexOf(request), 1);
                 if (that.queueId == queueId && that.requestQueue.length) {
                     var pendingRequest = that.requestQueue.shift();
@@ -100,8 +100,7 @@ L.TileLayer.XServer = L.TileLayer.extend({
                 }
 
                 handleSuccess(err, resp);
-            }
-            , true); // cross origin?
+            });
 
         this.activeRequests.push(request);
     },
@@ -268,7 +267,7 @@ L.TileLayer.XServer = L.TileLayer.extend({
                     return;
                 }
 
-                var resp = JSON.parse(response.responseText)
+                var resp = JSON.parse(response.text);
 
                 var prefixMap = {
                     "iVBOR": "data:image/png;base64,",
@@ -299,7 +298,7 @@ L.tileLayer.xserver = function (url, options) {
     if(url.indexOf("contentType=JSON") !== -1) {
         return new L.TileLayer.XServer(url, options);
     } else {
-        return new L.TileLayer(url, options)
+        return new L.TileLayer(url, options);
     }
 };
 

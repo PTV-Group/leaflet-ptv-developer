@@ -1,7 +1,7 @@
 "use strict";
 
 var L = require('leaflet'),
-    corslite = require('corslite');
+    superagent = require('superagent');
     
 L.TileLayer.XServer07 = L.TileLayer.extend({
     includes: L.Mixin.Events,
@@ -184,17 +184,16 @@ L.TileLayer.XServer07 = L.TileLayer.extend({
         var that = this;
         var queueId = this.queueId;
 
-        var request = corslite(url, 
-            function(err, resp) {
+        var request = superagent.get(url)
+            .end(function (err, resp) {
                 that.activeRequests.splice(that.activeRequests.indexOf(request), 1);
                 if (that.queueId == queueId && that.requestQueue.length) {
                     var pendingRequest = that.requestQueue.shift();
                     that.runRequestQ(pendingRequest.url, pendingRequest.handleSuccess, true);
                 }
-                
+
                 handleSuccess(err, resp);
-            }
-			, true); // cross origin?
+            });
 
         this.activeRequests.push(request);
     },
@@ -223,7 +222,7 @@ L.TileLayer.XServer07 = L.TileLayer.extend({
 					return;
 				}
 				
-				var resp = JSON.parse(response.responseText)
+				var resp = JSON.parse(response.text);
 				
                 var prefixMap = {
                     "iVBOR": "data:image/png;base64,",
@@ -254,7 +253,11 @@ L.TileLayer.XServer07 = L.TileLayer.extend({
 });
 
 L.tileLayer.xserver07 = function (url, options) {
-    return new L.TileLayer.XServer07(url, options);
+    if(url.indexOf("contentType=JSON") !== -1) {
+        return new L.TileLayer.XServer07(url, options);
+    } else {
+        return new L.TileLayer(url, options);
+    }
 };
 
 module.exports = L.tileLayer.xserver07;

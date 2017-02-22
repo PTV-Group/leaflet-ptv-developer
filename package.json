@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "leaflet": "^1.0.3",
-    "corslite": "^0.0.7",
+    "superagent": "^3.3.4",
 	  "leaflet.nontiledlayer": "^1.0.3"
   },
   "devDependencies": {
