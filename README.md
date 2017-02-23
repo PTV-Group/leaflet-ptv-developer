@@ -1,3 +1,7 @@
+[![Build status](https://travis-ci.org/ptv-logistics/leaflet-xserver.svg)](https://travis-ci.org/ptv-logistics/leaflet-xserver)
+[![NPM version](https://img.shields.io/npm/v/leaflet-xserver.svg)](https://www.npmjs.com/package/leaflet-xserver)
+![Leaflet compatible!](https://img.shields.io/badge/Leaflet-0.7.7%2F1.0.2-blue.svg?style=flat)
+
 leaflet-xserver provides classes to add xMapServer specific features to Leaflet.
 
 ### L.TileLayer.XServer
