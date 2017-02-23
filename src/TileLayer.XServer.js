@@ -2,12 +2,19 @@
 
 var L = require('leaflet'),
     superagent = require('superagent'),
-	nontiledlayer = require('leaflet.nontiledlayer');
+    nontiledlayer = require('leaflet.nontiledlayer');
 
 L.TileLayer.XServer = L.TileLayer.extend({
     includes: L.Mixin.Events,
 
+    _isrsLayer: false,
+
     initialize: function (url, options) {
+        this._isrsLayer = (url.indexOf("/renderMap") !== -1);
+
+        if(!this._isrsLayer && url.indexOf("contentType=JSON") === -1)
+            throw new Error('L.TileLayer.XServer cannot be intatiated directly without contentType=JSON')
+
         L.TileLayer.prototype.initialize.call(this, url, options);
     },
 
@@ -17,10 +24,10 @@ L.TileLayer.XServer = L.TileLayer.extend({
         L.TileLayer.prototype.onAdd.call(this, map);
 
         var cont = map._container;
-    
+
         cont.addEventListener('mousemove', L.bind(this._onMouseMove, this), true);
         cont.addEventListener('mousedown', L.bind(this._onMouseDown, this), true);
-    
+
         map._mapPane.addEventListener('click', L.bind(this._onClick, this), true);
         map.addEventListener('click', L.bind(this._onMapClick, this), false);
     },
@@ -29,10 +36,10 @@ L.TileLayer.XServer = L.TileLayer.extend({
         this._resetQueue();
 
         var cont = map._container;
-    
+
         cont.removeEventListener('mousemove', L.bind(this._onMouseMove, this), true);
         cont.removeEventListener('mousedown', L.bind(this._onMouseDown, this), true);
-    
+
         map._mapPane.removeEventListener('click', L.bind(this._onClick, this), true);
         map.removeEventListener('click', L.bind(this._onMapClick, this), false);
 
@@ -47,25 +54,25 @@ L.TileLayer.XServer = L.TileLayer.extend({
 
     queueId: 0,
 
-	_setView: function (center, zoom, noPrune, noUpdate) {
-		var tileZoom = Math.round(zoom);
-		if ((this.options.maxZoom !== undefined && tileZoom > this.options.maxZoom) ||
-		    (this.options.minZoom !== undefined && tileZoom < this.options.minZoom)) {
-			tileZoom = undefined;
-		}
+    _setView: function (center, zoom, noPrune, noUpdate) {
+        var tileZoom = Math.round(zoom);
+        if ((this.options.maxZoom !== undefined && tileZoom > this.options.maxZoom) ||
+            (this.options.minZoom !== undefined && tileZoom < this.options.minZoom)) {
+            tileZoom = undefined;
+        }
 
-		var tileZoomChanged = this.options.updateWhenZooming && (tileZoom !== this._tileZoom);
+        var tileZoomChanged = this.options.updateWhenZooming && (tileZoom !== this._tileZoom);
 
-        if(tileZoomChanged)
+        if (tileZoomChanged)
             this._resetQueue();
 
         L.TileLayer.prototype._setView.call(this, center, zoom, noPrune, noUpdate);
     },
 
-    redraw: function() {
+    redraw: function () {
         this._resetQueue();
 
-        L.TileLayer.prototype.redraw.call(this);        
+        L.TileLayer.prototype.redraw.call(this);
     },
 
     _resetQueue: function () {
@@ -79,10 +86,11 @@ L.TileLayer.XServer = L.TileLayer.extend({
         this.activeRequests = [];
     },
 
-    runRequestQ: function (url, handleSuccess, force) {
+    runRequestQ: function (url, request, handleSuccess, force) {
         if (!force && this.activeRequests.length >= this.maxConcurrentRequests) {
             this.requestQueue.push({
                 url: url,
+                request: request,
                 handleSuccess: handleSuccess
             });
             return;
@@ -91,40 +99,43 @@ L.TileLayer.XServer = L.TileLayer.extend({
         var that = this;
         var queueId = this.queueId;
 
-        var request = superagent.get(url)
-            .end(function (err, resp) {
-                that.activeRequests.splice(that.activeRequests.indexOf(request), 1);
-                if (that.queueId == queueId && that.requestQueue.length) {
-                    var pendingRequest = that.requestQueue.shift();
-                    that.runRequestQ(pendingRequest.url, pendingRequest.handleSuccess, true);
-                }
+        var req;
 
-                handleSuccess(err, resp);
-            });
+        if (request == null) { // rest/get
+            req = superagent.get(url)
+                .end(function (err, resp) {
+                    that.activeRequests.splice(that.activeRequests.indexOf(request), 1);
+                    if (that.queueId == queueId && that.requestQueue.length) {
+                        var pendingRequest = that.requestQueue.shift();
+                        that.runRequestQ(pendingRequest.url, pendingRequest.request, pendingRequest.handleSuccess, true);
+                    }
 
-        this.activeRequests.push(request);
-    },
+                    handleSuccess(err, resp);
+                });
+        } else { // rs/post
+            req = superagent.post(url)
+                .set('Content-Type', 'application/json')
+                .send(request)
+                .auth(this.options.username, this.options.password)
+                .end(function (err, resp) {
+                    that.activeRequests.splice(that.activeRequests.indexOf(request), 1);
+                    if (that.queueId == queueId && that.requestQueue.length) {
+                        var pendingRequest = that.requestQueue.shift();
+                        that.runRequestQ(pendingRequest.url, pendingRequest.request, pendingRequest.handleSuccess, true);
+                    }
 
-    findElement: function (e, container) {
-        // this. is the image!
-        var mp = L.DomEvent.getMousePosition(e, container);
-
-        for (var i = container._layers.length - 1; i >= 0; i--) {
-            var layer = container._layers[i];
-            var width = Math.abs(layer.pixelBoundingBox.right - layer.pixelBoundingBox.left);
-            var height = Math.abs(layer.pixelBoundingBox.top - layer.pixelBoundingBox.bottom);
-            if ((layer.referencePixelPoint.x - width / 2 <= mp.x) && (layer.referencePixelPoint.x + width / 2 >= mp.x) &&
-                (layer.referencePixelPoint.y - height / 2 <= mp.y) && (layer.referencePixelPoint.y + height / 2 >= mp.y)) {
-                return layer;
-            }
+                    handleSuccess(err, resp);
+                });
         }
 
-        return null;
+        this.activeRequests.push(req);
     },
 
     findElement: function (e, container) {
         if (!container)
             return null;
+
+        var result = {};
 
         var tiles = Array.prototype.slice.call(container.getElementsByTagName('img')),
             i, len, tile;
@@ -139,10 +150,14 @@ L.TileLayer.XServer = L.TileLayer.extend({
                 var height = Math.abs(layer.pixelBoundingBox.top - layer.pixelBoundingBox.bottom);
                 if ((layer.referencePixelPoint.x - width / 2 <= mp.x) && (layer.referencePixelPoint.x + width / 2 >= mp.x) &&
                     (layer.referencePixelPoint.y - height / 2 <= mp.y) && (layer.referencePixelPoint.y + height / 2 >= mp.y)) {
-                    return layer;
+                    if (!result[layer.id])
+                        result[layer.id] = layer;
                 }
             }
         }
+
+        if (Object.keys(result).length > 0)
+            return result;
 
         return null;
     },
@@ -178,18 +193,13 @@ L.TileLayer.XServer = L.TileLayer.extend({
         if (found) {
             e.preventDefault();
 
-            var description = '';
-            for (var i = 0; i < found.attributes.length; i++) {
-                var attribute = found.attributes[i];
-                description = description.concat(
-                    attribute.key.replace(/[A-Z]/g, " $&") + ': ' +
-                    attribute.value.replace("_", " ") + '<br>');
-            }
+            var description = this.buildDescriptionText(found);
+
+            var point = found[Object.keys(found)[0]].latLng;
 
             L.popup()
-                .setLatLng(found.latLng)
-                .setContent(description
-                    .toLowerCase())
+                .setLatLng(point)
+                .setContent(description)
                 .openOn(this._map);
 
             e.stopPropagation();
@@ -200,22 +210,39 @@ L.TileLayer.XServer = L.TileLayer.extend({
     _onMapClick: function (e) {
         var found = this.findElement(e.originalEvent, this._container);
         if (found) {
-            var description = '';
-            for (var i = 0; i < found.attributes.length; i++) {
-                var attribute = found.attributes[i];
-                description = description.concat(
-                    attribute.key.replace(/[A-Z]/g, " $&") + ': ' +
-                    attribute.value.replace("_", " ") + '<br>');
-            }
+            var description = this.buildDescriptionText(found);
+
+            var point = found[Object.keys(found)[0]].latLng;
 
             L.popup()
-                .setLatLng(found.latLng)
-                .setContent(description
-                    .toLowerCase())
+                .setLatLng(point)
+                .setContent(description)
                 .openOn(this._map);
 
             return false;
         }
+    },
+
+    buildDescriptionText: function (found) {
+        var description = '';
+        var isFirstLayer = true;
+
+        for (var layer in found) {
+            if (isFirstLayer) {
+                isFirstLayer = false;
+            } else {
+                description = description + '<br>';
+            }
+
+            for (var i = 0; i < found[layer].attributes.length; i++) {
+                var attribute = found[layer].attributes[i];
+                description = description.concat(
+                    attribute.key.replace(/[A-Z]/g, " $&") + ': ' +
+                    attribute.value.replace("_", " ") + '<br>');
+            }
+        }
+
+        return description.toLowerCase();;
     },
 
     pixToLatLng: function (tileKey, point) {
@@ -254,10 +281,23 @@ L.TileLayer.XServer = L.TileLayer.extend({
 
         var url = this.getTileUrl(coords);
 
+        if (this._isrsLayer) {
+            // Modify/extend this object for customization, for example the stored profile 
+            var request = {
+                "mapSection": { "$type": "MapSectionByTileKey", "zoomLevel": coords.z, "x": coords.x, "y": coords.y },
+                "imageOptions": { "width": 256, "height": 256 },
+                "resultFields": { "image": true }
+            };
+
+            if (this.options.requestExtension) {
+                request = L.extend(request, this.options.requestExtension);
+            }
+        }
+
         tile._map = this._map;
         tile._layers = [];
 
-        this.runRequestQ(url,
+        this.runRequestQ(url, request,
             L.bind(function (error, response) {
                 if (!this._map)
                     return;
@@ -295,7 +335,7 @@ L.TileLayer.XServer = L.TileLayer.extend({
 });
 
 L.tileLayer.xserver = function (url, options) {
-    if(url.indexOf("contentType=JSON") !== -1) {
+    if ((url.indexOf("/renderMap") !== -1) || (url.indexOf("contentType=JSON") !== -1)) {
         return new L.TileLayer.XServer(url, options);
     } else {
         return new L.TileLayer(url, options);

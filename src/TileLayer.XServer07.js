@@ -7,6 +7,9 @@ L.TileLayer.XServer07 = L.TileLayer.extend({
     includes: L.Mixin.Events,
 
     initialize: function(url, options) {                                   
+        if(url.indexOf("contentType=JSON") === -1)
+            throw new Error('L.TileLayer.XServer cannot be intatiated directly without contentType=JSON')
+
         L.TileLayer.prototype.initialize.call(this, url, options);
     },
 
