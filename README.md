@@ -23,7 +23,7 @@ var interactiveTileLayer = L.tileLayer.xserver(
     {
         profile: 'silkysand',
         token: window.token,
-        attribution: '<a target="_blank" href="http://www.ptvgroup.com">PTV</a>, TOMTOM',
+        attribution: '<a target="_blank" href="http://www.ptvgroup.com">PTV</a>, HERE',
         subdomains: '1234',
         maxZoom: 22,
         pane: 'tilePane'
@@ -47,7 +47,7 @@ var basemapLayer = L.tileLayer(
     {
         profile: 'silkysand',
         token: window.token,
-        attribution: '<a target="_blank" href="http://www.ptvgroup.com">PTV</a>, TOMTOM',
+        attribution: '<a target="_blank" href="http://www.ptvgroup.com">PTV</a>, HERE',
         subdomains: '1234',
         maxZoom: 22,
         pane: 'tilePane'
@@ -66,14 +66,14 @@ var truckAttributesLayer = L.tlieLayer.xserver(
     {
         profile: 'silkysand',
         token: window.token,
-        attribution: '<a target="_blank" href="http://www.ptvgroup.com">PTV</a>, TOMTOM',
+        attribution: '<a target="_blank" href="http://www.ptvgroup.com">PTV</a>, HERE',
         subdomains: '1234',
         maxZoom: 22,
         pane: 'clickableTiles'
     }).addTo(map);
 ```
 
-leaflet-xserver also has a specific `L.TileLayer.ClickableTiles07` class for bawckward-compatibility with Leaflet 0.7.x.
+leaflet-xserver also has a specific `L.TileLayer.XServer07` class for bawckward-compatibility with Leaflet 0.7.x.
 
 ### L.NonTiledLayer, L.NonTiledLayer.WMS
 
