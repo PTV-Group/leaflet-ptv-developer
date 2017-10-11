@@ -4,8 +4,8 @@ var L = require('leaflet'),
 	superagent = require('superagent');
     
 L.TileLayer.XServer07 = L.TileLayer.extend({
-	includes: L.Mixin.Events,
-
+	includes: L.Evented || L.Mixin.Events,
+	
 	initialize: function(url, options) {                                   
 		if(url.indexOf('contentType=JSON') === -1)
 			throw new Error('L.TileLayer.XServer cannot be intatiated directly without contentType=JSON')

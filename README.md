@@ -60,7 +60,7 @@ var circle = L.circle(coordinate, radius / Math.cos(coordinate.lng / 2 / Math.PI
         pane: 'overlayPane'
     }).addTo(map).bindPopup("I am a circle.");
 
-var truckAttributesLayer = L.tlieLayer.xserver(
+var truckAttributesLayer = L.tileLayer.xserver(
     'https://s0{s}-xserver2-europe-test.cloud.ptvgroup.com/services/rest/XMap/tile/{z}/{x}/{y}' +
     '?storedProfile={profile}&layers=PTV_TruckAttributes&contentType=JSON&xtok={token}',
     {
@@ -72,6 +72,42 @@ var truckAttributesLayer = L.tlieLayer.xserver(
         pane: 'clickableTiles'
     }).addTo(map);
 ```
+
+#### As layered map
+[Demo](https://ptv-logistics.github.io/xserverjs/boilerplate/Leaflet-Clickable.1.0-rs.html)
+
+If you require more than the standard `rest` parameters, `L.tileLayer.xserver` can be initialized with a `requestExtension` property. This property then contains request parameters which are sent using the `/rs` api.
+
+```javascript
+var map = L.map('map').setView(new L.LatLng(49.01405, 8.4044), 14);
+
+var interactiveTileLayer = L.tileLayer.xserver(
+    'https://s0{s}-xserver2-europe-test.cloud.ptvgroup.com/services/rs/XMap/renderMap',
+    {
+        requestExtension: {
+            "storedProfile": "gravelpit",
+            "requestProfile": {
+                "featureLayerProfile": {
+                    "themes": [{
+                        "enabled": true,
+                        "id": "PTV_TruckAttributes"
+                    }]
+                }
+            },
+            "resultFields": {
+                "featureThemeIds": ["PTV_TruckAttributes"]
+                }
+        },
+        username: 'xtok',
+        password: window.token,
+        attribution: '<a target="_blank" href="http://www.ptvgroup.com">PTV</a>, HERE',
+        subdomains: '1234',
+        maxZoom: 22,
+        pane: 'tilePane'
+    }).addTo(map);
+```
+
+#### L.tileLayer.xserver for Leaflet 0.7
 
 leaflet-xserver also has a specific `L.TileLayer.XServer07` class for bawckward-compatibility with Leaflet 0.7.x.
 
