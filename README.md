@@ -73,10 +73,10 @@ var truckAttributesLayer = L.tileLayer.xserver(
     }).addTo(map);
 ```
 
-#### As layered map
+#### Using the JSON API
 [Demo](https://ptv-logistics.github.io/xserverjs/boilerplate/Leaflet-Clickable.1.0-rs.html)
 
-If you require more than the standard `rest` parameters, `L.tileLayer.xserver` can be initialized with a `requestExtension` property. This property then contains request parameters which are sent using the `/rs` api.
+If you need more than the standard REST parameters, `L.TileLayer.Xserver` can be initialized with a `requestExtension` property. This property then contains parameters which are sent using the JSON api.
 
 ```javascript
 var map = L.map('map').setView(new L.LatLng(49.01405, 8.4044), 14);
