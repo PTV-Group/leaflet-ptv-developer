@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "leaflet": "^1.2.0",
-    "superagent": "^3.3.4",
+    "superagent": "^3.7.0",
 	  "leaflet.nontiledlayer": "^1.0.6"
   },
   "devDependencies": {

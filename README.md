@@ -5,6 +5,11 @@
 
 leaflet-xserver provides classes to add xMapServer specific features to Leaflet.
 
+### Magic Auto Attribution (experimenal)
+
+If included to the script, `leaflet-xserver.js` automatically sets the correct attribution text for every
+layer that uses the xMapServer-2 rest api.
+
 ### L.TileLayer.XServer
 
 The Layer class `L.TileLayer.XServer` can be used to make xServer elements clickable. 
