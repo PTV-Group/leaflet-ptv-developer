@@ -43,7 +43,6 @@ var interactiveTileLayer = L.tileLayer.xserver(
     {
         profile: 'silkysand',
         token: window.token,
-        attribution: '<a target="_blank" href="http://www.ptvgroup.com">PTV</a>, HERE',
         subdomains: '1234',
         maxZoom: 22,
         pane: 'tilePane'
@@ -67,7 +66,6 @@ var basemapLayer = L.tileLayer(
     {
         profile: 'silkysand',
         token: window.token,
-        attribution: '<a target="_blank" href="http://www.ptvgroup.com">PTV</a>, HERE',
         subdomains: '1234',
         maxZoom: 22,
         pane: 'tilePane'
@@ -86,7 +84,6 @@ var truckAttributesLayer = L.tileLayer.xserver(
     {
         profile: 'silkysand',
         token: window.token,
-        attribution: '<a target="_blank" href="http://www.ptvgroup.com">PTV</a>, HERE',
         subdomains: '1234',
         maxZoom: 22,
         pane: 'clickableTiles'
