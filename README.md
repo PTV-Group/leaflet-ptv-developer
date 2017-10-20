@@ -22,7 +22,7 @@ or use the latest build at https://unpkg.com/leaflet-xserver/dist/
 ### Magic Auto Attribution (experimental)
 
 If included to the script, `leaflet-xserver.js` automatically sets the correct attribution text for every
-layer that uses the xMapServer-2 rest api.
+layer that uses the xMapServer-2 `rest` or `rs` api.
 
 <a name="tilelayerxserver"></a>
 ### L.TileLayer.XServer
