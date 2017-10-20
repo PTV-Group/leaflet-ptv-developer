@@ -3,13 +3,20 @@
 ![XServer 2.2!](https://img.shields.io/badge/XServer-2.2-blue.svg?style=flat)
 ![Leaflet compatible!](https://img.shields.io/badge/Leaflet-0.7.7%2F1.0.2-blue.svg?style=flat)
 
-leaflet-xserver provides classes to add xMapServer specific features to Leaflet.
+#### leaflet-xserver provides classes to add xMapServer specific features to Leaflet.
 
+**Components**
+* [Magic Auto Attribution (experimenal)](#autoattribution)
+* [L.TileLayer.XServer](#tilelayerxserver)
+* [L.NonTiledLayer, L.NonTiledLayer.WMS](#nontiledlayer)
+
+<a name="autoattribution"></a>
 ### Magic Auto Attribution (experimenal)
 
 If included to the script, `leaflet-xserver.js` automatically sets the correct attribution text for every
 layer that uses the xMapServer-2 rest api.
 
+<a name="tilelayerxserver"></a>
 ### L.TileLayer.XServer
 
 The Layer class `L.TileLayer.XServer` can be used to make xServer elements clickable. 
@@ -116,6 +123,7 @@ var interactiveTileLayer = L.tileLayer.xserver(
 
 leaflet-xserver also has a specific `L.TileLayer.XServer07` class for bawckward-compatibility with Leaflet 0.7.x.
 
+<a name="nontiledlayer"></a>
 ### L.NonTiledLayer, L.NonTiledLayer.WMS
 
 Not all imagery providers can handle tiles properly, for example if they render labels dynamically.
