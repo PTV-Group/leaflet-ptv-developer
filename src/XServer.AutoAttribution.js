@@ -9,7 +9,7 @@
 	var proto = L.TileLayer.prototype;
 	var prev = proto.initialize;
 
-	var xmapRegex = new RegExp('(^http[s]:\/\/.*\/)services\/rest\/XMap\/');
+	var xmapRegex = new RegExp('(^http[s]:\/\/.*\/)services\/(rest|rs)\/XMap\/');
 	var tokenRegex = new RegExp('[&\?]xtok=(\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12})');
 
 	proto.initialize = function (url, options) {
@@ -28,13 +28,13 @@
 		if (!urlMatch || urlMatch.length < 2)
 			return;
 
-		// TODO: parse token from resolvedUrl
+		// parse token from resolvedUrl
 		var tokenMatch = tokenRegex.exec(resolvedUrl);
 		var token = (tokenMatch && tokenMatch.length > 1) ? tokenMatch[1] : null;
 
 		var host = urlMatch[1];
 
-		// helper method to initialize copyright from XRuntime
+		// get copyright from XRuntime
 		var req = superagent.post(host + 'services/rs/XRuntime/experimental/getDataInformation')
 			.set('Content-Type', 'application/json')
 			.send({
@@ -59,6 +59,8 @@
 			var oldCopyright = that.options.attribution;
 
 			that.options.attribution = copyright;
+
+			// set or replace copyright in attributionControl
 			if (that._map.attributionControl) {
 				if(oldCopyright) // remove old copyright
 					that._map.attributionControl.removeAttribution(oldCopyright);
