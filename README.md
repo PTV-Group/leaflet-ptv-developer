@@ -3,15 +3,23 @@
 ![XServer 2.2!](https://img.shields.io/badge/XServer-2.2-blue.svg?style=flat)
 ![Leaflet compatible!](https://img.shields.io/badge/Leaflet-0.7.7%2F1.0.2-blue.svg?style=flat)
 
-#### leaflet-xserver provides classes to add xMapServer specific features to Leaflet.
+## Purpose
+leaflet-xserver provides classes to add xMapServer specific features to Leaflet.
 
-**Components**
-* [Magic Auto Attribution (experimenal)](#autoattribution)
+## Components
+
+* [Magic Auto Attribution (experimental)](#autoattribution)
 * [L.TileLayer.XServer](#tilelayerxserver)
 * [L.NonTiledLayer, L.NonTiledLayer.WMS](#nontiledlayer)
 
+## How to build
+
+```npm install``` 
+
+or use the latest build at https://unpkg.com/leaflet-xserver/dist/
+
 <a name="autoattribution"></a>
-### Magic Auto Attribution (experimenal)
+### Magic Auto Attribution (experimental)
 
 If included to the script, `leaflet-xserver.js` automatically sets the correct attribution text for every
 layer that uses the xMapServer-2 rest api.
