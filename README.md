@@ -1,7 +1,7 @@
 [![Build status](https://travis-ci.org/ptv-logistics/leaflet-xserver.svg)](https://travis-ci.org/ptv-logistics/leaflet-xserver)
 [![NPM version](https://img.shields.io/npm/v/leaflet-xserver.svg)](https://www.npmjs.com/package/leaflet-xserver)
 ![XServer 2.2!](https://img.shields.io/badge/XServer-2.2-blue.svg?style=flat)
-![Leaflet compatible!](https://img.shields.io/badge/Leaflet-0.7.7%2F1.0.2-blue.svg?style=flat)
+![Leaflet compatible!](https://img.shields.io/badge/Leaflet-0.7.x%2F1.x-blue.svg?style=flat)
 
 ## Purpose
 leaflet-xserver provides classes to add xMapServer specific features to Leaflet.
@@ -62,9 +62,9 @@ var map = L.map('map').setView(coordinate, 14);
 
 var basemapLayer = L.tileLayer(
     'https://s0{s}-xserver2-europe-test.cloud.ptvgroup.com/services/rest/XMap/tile/{z}/{x}/{y}' +
-    '?storedProfile={profile}&xtok={token}',
-    {
+    '?storedProfile={profile}&layers={layers}&xtok={token}', {
         profile: 'silkysand',
+        layers: 'background,transport',
         token: window.token,
         subdomains: '1234',
         maxZoom: 22,
@@ -72,17 +72,18 @@ var basemapLayer = L.tileLayer(
     }).addTo(map);
 
 var circle = L.circle(coordinate, radius / Math.cos(coordinate.lng / 2 / Math.PI), {
-        color: 'red',
-        fillColor: 'orange',
-        fillOpacity: 0.5,
-        pane: 'overlayPane'
-    }).addTo(map).bindPopup("I am a circle.");
+    color: 'red',
+    fillColor: 'orange',
+    fillOpacity: 0.5,
+    pane: 'overlayPane',
+    attribution: 'My Circle'
+}).addTo(map).bindPopup("I am a circle.");
 
 var truckAttributesLayer = L.tileLayer.xserver(
     'https://s0{s}-xserver2-europe-test.cloud.ptvgroup.com/services/rest/XMap/tile/{z}/{x}/{y}' +
-    '?storedProfile={profile}&layers=PTV_TruckAttributes&contentType=JSON&xtok={token}',
-    {
+    '?storedProfile={profile}&layers={layers}&contentType=JSON&xtok={token}', {
         profile: 'silkysand',
+        layers: 'labels,PTV_TruckAttributes',
         token: window.token,
         subdomains: '1234',
         maxZoom: 22,
