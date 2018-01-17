@@ -10,7 +10,7 @@
 	var prev = proto.initialize;
 
 	// match fro xMap-2 /rest/ and /rs/ urls
-	var xmapRegex = new RegExp('(^http[s]:\/\/.*\/)services\/(rest|rs)\/XMap\/');
+	var xmapRegex = new RegExp('(^https?:\/\/.*\/)services\/(rest|rs)\/XMap\/');
 
 	// match for xserver-internet token (only new GUID-tokens!)
 	var tokenRegex = new RegExp('[&\?]xtok=(\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12})');
@@ -75,7 +75,7 @@
 
 		// match feature layer copyrights
 		var featurelayerRegex = /(PTV_[A-Za-z]*)/g;
-		if (copyright.featureLayers && copyright.featureLayers > 0) {
+		if (copyright.featureLayers && copyright.featureLayers.length > 0) {
 			var featurelayerMatches = url.match(featurelayerRegex);
 			if (featurelayerMatches && featurelayerMatches.length > 0) {
 				copyright.featureLayers.forEach(function (el) {
