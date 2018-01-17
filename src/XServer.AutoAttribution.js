@@ -10,7 +10,7 @@
 	var prev = proto.initialize;
 
 	// match fro xMap-2 /rest/ and /rs/ urls
-	var xmapRegex = new RegExp('(^https*:\/\/.*\/)services\/(rest|rs)\/XMap\/');
+	var xmapRegex = new RegExp('(^http[s]:\/\/.*\/)services\/(rest|rs)\/XMap\/');
 
 	// match for xserver-internet token (only new GUID-tokens!)
 	var tokenRegex = new RegExp('[&\?]xtok=(\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12})');
@@ -20,19 +20,15 @@
 		prev.call(this, url, options);
 
 		// get the resolved uri string
-		var resolvedUrl = this.getTileUrl({
-			x: 0,
-			y: 0,
-			z: 0
-		});
-
+		var resolvedUrl = this.getTileUrl({x: 0, y: 0, z: 0});
+		
 		// does it match an xMap-2 url?
 		var urlMatch = xmapRegex.exec(resolvedUrl);
 		if (!urlMatch || urlMatch.length < 2)
 			return;
 
 		// use the same host for XRuntime
-		var host = urlMatch[1];
+		var host = urlMatch[1];		
 
 		// parse token from resolvedUrl
 		var tokenMatch = tokenRegex.exec(resolvedUrl);
