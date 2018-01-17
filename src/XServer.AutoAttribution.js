@@ -83,16 +83,16 @@
 			var featurelayerMatches = url.match(featurelayerRegex);
 			if (featurelayerMatches && featurelayerMatches.length > 0) {
 				copyright.featureLayers.forEach(function (el) {
-					if (featurelayerMatches.indexOf(el.themeId) != -1)
+					if (featurelayerMatches.indexOf(el.themeId) !== -1)
 						matchedCopyrights = matchedCopyrights.concat(el.copyright);
 				});
 			}
 		}
 
 		// match for basemap copyrights
-		var baselayerRegex = new RegExp('(&|\\?)(layers=.*(background|labels|transport)|(?!layers=))');
+		var baselayerRegex = new RegExp('(&|\\?)(layers=.*(background|labels|transport)|^((?!layers=).)*$)');
 		var baselayerMatch = baselayerRegex.exec(url);
-		if (baselayerMatch && baselayerMatch.length > 0 || matchedCopyrights.length == 0) {
+		if (baselayerMatch && baselayerMatch.length > 0 || matchedCopyrights.length === 0) {
 			matchedCopyrights = matchedCopyrights.concat(copyright.basemap? copyright.basemap : copyright);
 		}
 
