@@ -2,14 +2,14 @@
 (function () {
 	'use strict';
 
-	var L = require('leaflet'),
+	var L = (typeof window !== 'undefined' ? window['L'] : typeof global !== 'undefined' ? global['L'] : null),
 		superagent = require('superagent');
 
 	// hijack TileLayer initialize
 	var proto = L.TileLayer.prototype;
 	var prev = proto.initialize;
 
-	// match fro xMap-2 /rest/ and /rs/ urls
+	// match for xMap-2 /rest/ and /rs/ urls
 	var xmapRegex = new RegExp('(^https?:\/\/.*\/)services\/(rest|rs)\/XMap\/');
 
 	// match for xserver-internet token (only new GUID-tokens!)
@@ -19,16 +19,32 @@
 		// base initialization first
 		prev.call(this, url, options);
 
+		autoSetAttributions(this);
+	};
+
+	var prevRedraw = proto.redraw;
+
+	proto.redraw = function () {
+		autoSetAttributions(this);
+
+		prevRedraw.call(this);
+	};
+
+	function autoSetAttributions(layer) {
 		// get the resolved uri string
-		var resolvedUrl = this.getTileUrl({x: 0, y: 0, z: 0});
-		
+		var resolvedUrl = layer.getTileUrl({
+			x: 0,
+			y: 0,
+			z: 0
+		});
+
 		// does it match an xMap-2 url?
 		var urlMatch = xmapRegex.exec(resolvedUrl);
 		if (!urlMatch || urlMatch.length < 2)
 			return;
 
 		// use the same host for XRuntime
-		var host = urlMatch[1];		
+		var host = urlMatch[1];
 
 		// parse token from resolvedUrl
 		var tokenMatch = tokenRegex.exec(resolvedUrl);
@@ -49,23 +65,22 @@
 		if (token)
 			req.auth('xtok', token);
 
-		var that = this;
 		req.end(function (err, resp) {
-			var oldCopyright = that.options.attribution;
+			var oldCopyright = layer.options.attribution;
 
 			var newCopyright = (err || !resp || !resp.body || !resp.body.mapDescription ||
 					!resp.body.mapDescription.copyright) ?
 				'PTV, HERE (or maybe TOMTOM), AND' :
 				matchCopyrights(resolvedUrl, resp.body.mapDescription.copyright);
 
-			that.options.attribution = newCopyright;
+			layer.options.attribution = newCopyright;
 
 			// set or replace copyright in attributionControl
-			if (that._map && that._map.attributionControl) {
+			if (layer._map && layer._map.attributionControl) {
 				if (oldCopyright) // remove old copyright
-					that._map.attributionControl.removeAttribution(oldCopyright);
+					layer._map.attributionControl.removeAttribution(oldCopyright);
 
-				that._map.attributionControl.addAttribution(newCopyright);
+				layer._map.attributionControl.addAttribution(newCopyright);
 			}
 		});
 	}
@@ -89,7 +104,7 @@
 		var baselayerRegex = new RegExp('(&|\\?)(layers=.*(background|labels|transport)|^((?!layers=).)*$)');
 		var baselayerMatch = baselayerRegex.exec(url);
 		if (baselayerMatch && baselayerMatch.length > 0 || matchedCopyrights.length === 0) {
-			matchedCopyrights = matchedCopyrights.concat(copyright.basemap? copyright.basemap : copyright);
+			matchedCopyrights = matchedCopyrights.concat(copyright.basemap ? copyright.basemap : copyright);
 		}
 
 		// make mentions unique
@@ -99,4 +114,39 @@
 		});
 		return result;
 	}
+
+	var protoAttribution = L.Control.Attribution.prototype;
+
+	var prev_update = proto._update;
+
+	protoAttribution._update = function () {
+		if (!this._map) {
+			return;
+		}
+
+		var attribs = [];
+
+		for (var i in this._attributions) {
+			if (this._attributions[i]) {
+				var split = i.split(',');
+				attribs = attribs.concat(split);
+			}
+		}
+		var uniqueAttribs = [];
+		attribs.forEach(function (el) {
+			if (uniqueAttribs.indexOf(el) < 0) uniqueAttribs.push(el);
+		});
+		uniqueAttribs.sort().reverse();
+
+		var prefixAndAttribs = [];
+
+		if (this.options.prefix) {
+			prefixAndAttribs.push(this.options.prefix);
+		}
+		if (uniqueAttribs.length) {
+			prefixAndAttribs.push(uniqueAttribs.join(', '));
+		}
+
+		this._container.innerHTML = prefixAndAttribs.join(' | ');
+	};
 })();
