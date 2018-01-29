@@ -51,7 +51,7 @@
 		var token = (tokenMatch && tokenMatch.length > 1) ? tokenMatch[1] : null;
 
 		// get copyright from XRuntime
-		var req = superagent.post(host + 'services/rs/XRuntime/experimental/getDataInformation')
+		var req = superagent.post(host + 'services/rs/XRuntime/getDataInformation')
 			.set('Content-Type', 'application/json')
 			.send({
 				dataInformationOptions: {
