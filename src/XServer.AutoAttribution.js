@@ -53,11 +53,7 @@
 		// get copyright from XRuntime
 		var req = superagent.post(host + 'services/rs/XRuntime/getDataInformation')
 			.set('Content-Type', 'application/json')
-			.send({
-				resultFields: {
-					continents: false
-				}
-			});
+			.send({});
 
 		if (token)
 			req.auth('xtok', token);
