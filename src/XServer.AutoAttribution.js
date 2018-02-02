@@ -54,9 +54,6 @@
 		var req = superagent.post(host + 'services/rs/XRuntime/getDataInformation')
 			.set('Content-Type', 'application/json')
 			.send({
-				dataInformationOptions: {
-					returnOnlyLicensedMapFeatures: true
-				},
 				resultFields: {
 					continents: false
 				}
@@ -70,7 +67,7 @@
 
 			var newCopyright = (err || !resp || !resp.body || !resp.body.mapDescription ||
 					!resp.body.mapDescription.copyright) ?
-				'PTV, HERE (or maybe TOMTOM), AND' :
+				'PTV' :
 				matchCopyrights(resolvedUrl, resp.body.mapDescription.copyright);
 
 			layer.options.attribution = newCopyright;
