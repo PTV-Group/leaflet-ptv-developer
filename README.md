@@ -19,7 +19,7 @@ leaflet-xserver provides classes to add xMapServer specific features to Leaflet.
 or use the latest build at https://unpkg.com/leaflet-xserver/dist/
 
 <a name="autoattribution"></a>
-### Magic Auto Attribution (experimental)
+### Auto Attribution 
 
 If included to the script, `leaflet-xserver.js` automatically sets the correct attribution text for every
 layer that uses the xMapServer-2 `rest` or `rs` api.
