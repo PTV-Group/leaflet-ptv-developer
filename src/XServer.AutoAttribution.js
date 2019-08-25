@@ -81,6 +81,13 @@
 	function matchCopyrights(url, copyright) {
 		var matchedCopyrights = [];
 
+		// match for basemap copyrights
+		var baselayerRegex = new RegExp('(&|\\?)(layers=.*(background|labels|transport)|^((?!layers=).)*$)');
+		var baselayerMatch = baselayerRegex.exec(url);
+		if (baselayerMatch && baselayerMatch.length > 0 || matchedCopyrights.length === 0) {
+			matchedCopyrights = matchedCopyrights.concat(copyright.basemap ? copyright.basemap : copyright);
+		}
+
 		// match feature layer copyrights
 		var featurelayerRegex = /(PTV_[A-Za-z]*)/g;
 		if (copyright.featureLayers && copyright.featureLayers.length > 0) {
@@ -91,13 +98,6 @@
 						matchedCopyrights = matchedCopyrights.concat(el.copyright);
 				});
 			}
-		}
-
-		// match for basemap copyrights
-		var baselayerRegex = new RegExp('(&|\\?)(layers=.*(background|labels|transport)|^((?!layers=).)*$)');
-		var baselayerMatch = baselayerRegex.exec(url);
-		if (baselayerMatch && baselayerMatch.length > 0 || matchedCopyrights.length === 0) {
-			matchedCopyrights = matchedCopyrights.concat(copyright.basemap ? copyright.basemap : copyright);
 		}
 
 		// make mentions unique

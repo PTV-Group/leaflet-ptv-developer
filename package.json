@@ -1,6 +1,6 @@
 {
   "name": "leaflet-xserver",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Extended Leaflet classes for PTV xServer",
   "files": [
     "dist"
