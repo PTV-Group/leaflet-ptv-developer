@@ -1,15 +1,15 @@
 {
-    // Verwendet IntelliSense zum Ermitteln möglicher Attribute.
-    // Zeigen Sie auf vorhandene Attribute, um die zugehörigen Beschreibungen anzuzeigen.
-    // Weitere Informationen finden Sie unter https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
         {
             "type": "chrome",
             "request": "launch",
-            "name": "Launch Chrome",
+            "name": "Launch Chrome against local file",
+            "runtimeArgs": [
+                "--allow-file-access-from-files"
+            ],
             "file": "${workspaceRoot}/index.html",
-            "sourceMaps": true
-        }
+            "sourceMaps": false
+          }    
     ]
 }

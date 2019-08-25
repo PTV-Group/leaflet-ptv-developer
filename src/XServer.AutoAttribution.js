@@ -101,16 +101,37 @@
 		}
 
 		// make mentions unique
-		var result = [];
-		matchedCopyrights.forEach(function (el) {
-			if (result.indexOf(el < 0)) result.push(el);
-		});
-		return result;
+		return matchedCopyrights.filter(function(elem, pos, arr) {
+			return arr.indexOf(elem) == pos;
+		}).join(', ');
 	}
 
 	var protoAttribution = L.Control.Attribution.prototype;
 
 	var prev_update = proto._update;
+
+	protoAttribution.____update = function () {
+		if (!this._map) { return; }
+
+		var attribs = [];
+
+		for (var i in this._attributions) {
+			if (this._attributions[i]) {
+				attribs.push(i);
+			}
+		}
+
+		var prefixAndAttribs = [];
+
+		if (this.options.prefix) {
+			prefixAndAttribs.push(this.options.prefix);
+		}
+		if (attribs.length) {
+			prefixAndAttribs.push(attribs.join(', '));
+		}
+
+		this._container.innerHTML = prefixAndAttribs.join(' | ');
+	};
 
 	protoAttribution._update = function () {
 		if (!this._map) {
@@ -119,17 +140,22 @@
 
 		var attribs = [];
 
-		for (var i in this._attributions) {
-			if (this._attributions[i]) {
-				var split = i.split(',');
-				attribs = attribs.concat(split);
+		for (var i in this._map._layers) {
+			if (this._map._layers[i].getAttribution) {
+				var attr = this._map._layers[i].getAttribution();				
+				if(attr && this._attributions[attr]) {
+					attribs = attribs.concat(attr.split(','));
+				}
 			}
 		}
-		var uniqueAttribs = [];
-		attribs.forEach(function (el) {
-			if (uniqueAttribs.indexOf(el) < 0) uniqueAttribs.push(el);
-		});
-		uniqueAttribs.sort().reverse();
+
+		var uniqueAttribs = attribs
+			.map(function(elem) {
+				return elem.trim();
+			})
+			.filter(function(elem, pos, arr) {
+				return arr.indexOf(elem) == pos;
+			});
 
 		var prefixAndAttribs = [];
 

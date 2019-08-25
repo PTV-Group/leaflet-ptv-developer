@@ -2,7 +2,9 @@
   "name": "leaflet-xserver",
   "version": "1.0.5",
   "description": "Extended Leaflet classes for PTV xServer",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "main": "dist/leaflet-xserver-src.js",
   "directories": {
     "dist": "dist"
@@ -36,9 +38,8 @@
     "leaflet": "global:L"
   },
   "dependencies": {
-    "leaflet": "^1.2.0",
-    "superagent": "^3.7.0",
-	  "leaflet.nontiledlayer": "^1.0.6"
+    "leaflet": "^1.5.1",
+    "superagent": "^3.7.0"
   },
   "devDependencies": {
     "browserify": "^13.1.0",

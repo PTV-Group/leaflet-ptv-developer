@@ -1,8 +1,7 @@
 'use strict';
 
 var L = require('leaflet'),
-	superagent = require('superagent'),
-	nontiledlayer = require('leaflet.nontiledlayer');
+	superagent = require('superagent');
 
 L.TileLayer.XServer = L.TileLayer.extend({
 	_isrsLayer: false,

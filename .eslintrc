@@ -27,6 +27,5 @@
     "browser": true
   },
   "plugins": [
-    "html"
   ]
 }
