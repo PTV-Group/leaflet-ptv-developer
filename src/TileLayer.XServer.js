@@ -194,17 +194,16 @@ L.TileLayer.XServer = L.TileLayer.extend({
 		var tile = document.createElement('img');
 		tile._map = this._map;
 		tile._layers = [];
-		var that = this;
 
 		var sa = this._isrsLayer ?
 			superagent.post(url)
 				.set('Content-Type', 'application/json')
 				.send(request) :
-			sa.get(url);
+			superagent.get(url);
 
 		sa.auth(this.options.username, this.options.password)
 			.responseType('json')
-			.then(function (response) {
+			.then(L.bind(function (response) {
 				var resp = response.body;
 
 				var prefixMap = {
@@ -221,19 +220,26 @@ L.TileLayer.XServer = L.TileLayer.extend({
 
 					for (var i = 0; i < objectInfos.length; i++) {
 						var oi = objectInfos[i];
-						oi.latLng = that.pixToLatLng(coords, oi.referencePixelPoint);
+						oi.latLng = this.pixToLatLng(coords, oi.referencePixelPoint);
 						tile._layers.push(oi);
 					}
 				}
 
 				done(null, tile);
-			});
+			}, this));
 		return tile;
 	}
 });
 
 L.tileLayer.xserver = function (url, options) {
-	var resolvedUrl =  L.Util.TileLayer.template(url, options);
+	// only use the XServer layer for /renderMap or rest with contentType=JSON
+	var optionsCopy = {}
+	for (var key in options) {
+		optionsCopy[key] = options[key];
+	}
+	L.extend(optionsCopy, {s: 0, x: 0, y: 0, z: 0});
+	var resolvedUrl =  L.Util.template(url, optionsCopy);
+
 	if ((resolvedUrl.indexOf('/renderMap') !== -1) || (url.indexOf('contentType=JSON') !== -1)) {
 		return new L.TileLayer.XServer(url, options);
 	} else {
