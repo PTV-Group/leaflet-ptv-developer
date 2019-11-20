@@ -165,6 +165,14 @@ L.TileLayer.XServer = L.TileLayer.extend({
 			(180.0 / Math.PI) * x);
 	},
 
+	_removeTile: function (key) {
+		var tile = this._tiles[key];
+		if (tile && tile.el && tile.el.request)
+			tile.el.request.abort();
+			
+		return L.TileLayer.prototype._removeTile.call(this, key);
+	},
+
 	createTile: function (coords, done) {
 		var url = this.getTileUrl(coords);
 
@@ -195,33 +203,39 @@ L.TileLayer.XServer = L.TileLayer.extend({
 		tile._map = this._map;
 		tile._layers = [];
 
-		var sa = this._isrsLayer ?
+		tile.request = this._isrsLayer ?
 			superagent.post(url)
 				.set('Content-Type', 'application/json')
 				.send(request) :
 			superagent.get(url);
 
-		sa.auth(this.options.username, this.options.password)
+		tile.request.auth(this.options.username, this.options.password)
 			.responseType('json')
-			.then(L.bind(function (response) {
-				var resp = response.body;
+			.end(L.bind(function (err, response) {
+				tile.request = null;
 
-				var prefixMap = {
-					'iVBOR': 'data:image/png;base64,',
-					'R0lGO': 'data:image/gif;base64,',
-					'/9j/4': 'data:image/jpeg;base64,',
-					'Qk02U': 'data:image/bmp;base64,'
-				};
-				var rawImage = resp.image;
-				tile.src = prefixMap[rawImage.substr(0, 5)] + rawImage;
+				if(response && response.body && response.body.image)
+				{
+					var resp = response.body;
 
-				if (resp.features) {
-					var objectInfos = resp.features;
+					var prefixMap = {
+						'iVBOR': 'data:image/png;base64,',
+						'R0lGO': 'data:image/gif;base64,',
+						'/9j/4': 'data:image/jpeg;base64,',
+						'Qk02U': 'data:image/bmp;base64,'
+					};
+					
+					var rawImage = resp.image;
+					tile.src = prefixMap[rawImage.substr(0, 5)] + rawImage;
 
-					for (var i = 0; i < objectInfos.length; i++) {
-						var oi = objectInfos[i];
-						oi.latLng = this.pixToLatLng(coords, oi.referencePixelPoint);
-						tile._layers.push(oi);
+					if (resp.features) {
+						var objectInfos = resp.features;
+
+						for (var i = 0; i < objectInfos.length; i++) {
+							var oi = objectInfos[i];
+							oi.latLng = this.pixToLatLng(coords, oi.referencePixelPoint);
+							tile._layers.push(oi);
+						}
 					}
 				}
 
@@ -232,7 +246,7 @@ L.TileLayer.XServer = L.TileLayer.extend({
 });
 
 L.tileLayer.xserver = function (url, options) {
-	// only use the XServer layer for /renderMap or rest with contentType=JSON
+	// only use the XServer layer for rs/renderMap or rest/tile with contentType=JSON
 	var optionsCopy = {}
 	for (var key in options) {
 		optionsCopy[key] = options[key];
