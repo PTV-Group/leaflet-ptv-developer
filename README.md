@@ -122,7 +122,3 @@ var interactiveTileLayer = L.tileLayer.xserver(
         pane: 'tilePane'
     }).addTo(map);
 ```
-
-#### L.TileLayer.XServer for Leaflet 0.7
-
-leaflet-xserver also has a specific `L.TileLayer.XServer07` class for bawckward-compatibility with Leaflet 0.7.x.
