@@ -1,7 +1,7 @@
 [![Build status](https://travis-ci.org/ptv-logistics/leaflet-xserver.svg)](https://travis-ci.org/ptv-logistics/leaflet-xserver)
 [![NPM version](https://img.shields.io/npm/v/leaflet-xserver.svg)](https://www.npmjs.com/package/leaflet-xserver)
 ![XServer 2.x!](https://img.shields.io/badge/XServer-2.x-blue.svg?style=flat)
-![Leaflet compatible!](https://img.shields.io/badge/Leaflet-0.7.x%2F1.x-blue.svg?style=flat)
+![Leaflet compatible!](https://img.shields.io/badge/Leaflet-1.x-blue.svg?style=flat)
 
 ## Purpose
 leaflet-xserver provides classes to add xMapServer specific features to Leaflet.

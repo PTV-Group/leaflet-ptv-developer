@@ -209,8 +209,10 @@ L.TileLayer.XServer = L.TileLayer.extend({
 				.send(request) :
 			superagent.get(url);
 
-		tile.request.auth(this.options.username, this.options.password)
-			.responseType('json')
+		if(this.options.username && this.options.password)		
+			tile.request = tile.request.auth(this.options.username, this.options.password);
+		
+		tile.request.responseType('json')
 			.end(L.bind(function (err, response) {
 				tile.request = null;
 
