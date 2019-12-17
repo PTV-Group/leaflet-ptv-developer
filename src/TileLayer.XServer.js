@@ -5,36 +5,46 @@ var L = require('leaflet'),
 
 L.TileLayer.XServer = L.TileLayer.extend({
 	_isrsLayer: false,
+	options: {
+		disableMouseEvents : false,
+	},
 
 	initialize: function (url, options) {
-		this._isrsLayer = (url.indexOf('/renderMap') !== -1);
+		options = L.setOptions(this, options);
 
-		if (!this._isrsLayer && url.indexOf('contentType=JSON') === -1)
-			throw new Error('L.TileLayer.XServer cannot be intatiated directly without contentType=JSON')
-
+		var resolvedUrl = L.Util.template(url, L.extend({s: 0, x: 0, y: 0, z: 0}, options));
+		this._isrsLayer = resolvedUrl.indexOf('/renderMap') !== -1;
+		
+		if (!this._isrsLayer && resolvedUrl.indexOf('contentType=JSON') === -1)
+			throw new Error('L.TileLayer.XServer cannot be intatiated directly without contentType=JSON');
+		
 		L.TileLayer.prototype.initialize.call(this, url, options);
 	},
 
 	onAdd: function (map) {
 		L.TileLayer.prototype.onAdd.call(this, map);
 
-		var cont = map._container;
+		if(!this.options.disableMouseEvents) {
+			var cont = map._container;
 
-		cont.addEventListener('mousemove', L.bind(this._onMouseMove, this), true);
-		cont.addEventListener('mousedown', L.bind(this._onMouseDown, this), true);
+			cont.addEventListener('mousemove', L.bind(this._onMouseMove, this), true);
+			cont.addEventListener('mousedown', L.bind(this._onMouseDown, this), true);
 
-		map._mapPane.addEventListener('click', L.bind(this._onClick, this), true);
-		map.addEventListener('click', L.bind(this._onMapClick, this), false);
+			map._mapPane.addEventListener('click', L.bind(this._onClick, this), true);
+			map.addEventListener('click', L.bind(this._onMapClick, this), false);
+		}
 	},
 
 	onRemove: function (map) {
-		var cont = map._container;
+		if(!this.options.disableMouseEvents) {
+			var cont = map._container;
 
-		cont.removeEventListener('mousemove', L.bind(this._onMouseMove, this), true);
-		cont.removeEventListener('mousedown', L.bind(this._onMouseDown, this), true);
+			cont.removeEventListener('mousemove', L.bind(this._onMouseMove, this), true);
+			cont.removeEventListener('mousedown', L.bind(this._onMouseDown, this), true);
 
-		map._mapPane.removeEventListener('click', L.bind(this._onClick, this), true);
-		map.removeEventListener('click', L.bind(this._onMapClick, this), false);
+			map._mapPane.removeEventListener('click', L.bind(this._onClick, this), true);
+			map.removeEventListener('click', L.bind(this._onMapClick, this), false);
+		}
 
 		L.TileLayer.prototype.onRemove.call(this, map);
 	},
@@ -249,12 +259,7 @@ L.TileLayer.XServer = L.TileLayer.extend({
 
 L.tileLayer.xserver = function (url, options) {
 	// only use the XServer layer for rs/renderMap or rest/tile with contentType=JSON
-	var optionsCopy = {}
-	for (var key in options) {
-		optionsCopy[key] = options[key];
-	}
-	L.extend(optionsCopy, {s: 0, x: 0, y: 0, z: 0});
-	var resolvedUrl =  L.Util.template(url, optionsCopy);
+	var resolvedUrl =  L.Util.template(url, L.extend({s: 0, x: 0, y: 0, z: 0}, options));
 
 	if ((resolvedUrl.indexOf('/renderMap') !== -1) || (url.indexOf('contentType=JSON') !== -1)) {
 		return new L.TileLayer.XServer(url, options);
