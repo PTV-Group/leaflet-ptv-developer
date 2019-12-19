@@ -3,6 +3,7 @@
 ![Leaflet compatible!](https://img.shields.io/badge/Leaflet-1.x-blue.svg?style=flat)
 
 ## Purpose
+
 leaflet-xserver provides classes to add xMapServer specific features to Leaflet.
 
 ## Components
@@ -25,7 +26,7 @@ layer that uses the xMapServer-2 `rest` or `rs` api.
 <a name="tilelayerxserver"></a>
 ### L.TileLayer.XServer
 
-The Layer class `L.TileLayer.XServer` can be used to make xServer elements clickable or request a tile with specific parameters.
+The Layer class `L.TileLayer.XServer` can be used to make xServer elements clickable or request tiles with specific parameters.
 
 #### Additional options
 
