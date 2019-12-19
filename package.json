@@ -1,6 +1,6 @@
 {
   "name": "leaflet-xserver",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Extended Leaflet classes for PTV xServer",
   "files": [
     "dist"
@@ -38,7 +38,7 @@
     "leaflet": "global:L"
   },
   "dependencies": {
-    "leaflet": "^1.5.1",
+    "leaflet": "^1.6.0",
     "superagent": "^5.1.0"
   },
   "devDependencies": {
@@ -48,9 +48,6 @@
     "grunt": "^1.0.4",
     "grunt-browserify": "^5.3.0",
     "grunt-cli": "^1.2.0",
-    "grunt-contrib-uglify": "^2.0.0",
-    "phantomjs": "^2.1.7",
-    "tape": "^4.6.0",
-    "tape-run": "^2.1.4"
+    "grunt-contrib-uglify": "^2.0.0"
   }
 }

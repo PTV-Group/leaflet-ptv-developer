@@ -1,4 +1,3 @@
-[![Build status](https://travis-ci.org/ptv-logistics/leaflet-xserver.svg)](https://travis-ci.org/ptv-logistics/leaflet-xserver)
 [![NPM version](https://img.shields.io/npm/v/leaflet-xserver.svg)](https://www.npmjs.com/package/leaflet-xserver)
 ![XServer 2.x!](https://img.shields.io/badge/XServer-2.x-blue.svg?style=flat)
 ![Leaflet compatible!](https://img.shields.io/badge/Leaflet-1.x-blue.svg?style=flat)
@@ -26,12 +25,16 @@ layer that uses the xMapServer-2 `rest` or `rs` api.
 <a name="tilelayerxserver"></a>
 ### L.TileLayer.XServer
 
-The Layer class `L.TileLayer.XServer` can be used to make xServer elements clickable. 
+The Layer class `L.TileLayer.XServer` can be used to make xServer elements clickable or request a tile with specific parameters.
+
+#### Additional options
+
+* *disableMouseEvents* - disables all mouse click and hover events. Default: ```false```
 
 #### As single map
 [Demo](https://ptv-logistics.github.io/xserverjs/boilerplate/Leaflet-Clickable.1.0.html)
 
-The easiest way to add a clickable layer is to use the new `TileLayerXServer` and append a clickable xServer-Layer (`PTV_TruckAttributes`) to the profile. The icons of the layer can now be clicked to display the object information. The options are the same as for `L.TileLayer`
+The easiest way to add a clickable layer is to use class `L.TileLayer.XServer`, append a clickable xServer-Layer (e.g. `PTV_TruckAttributes`) to the profile and set the `&contentType=JSON` parameter. The icons of the layer can now be clicked to display the object information. The options are the same as for `L.TileLayer`
 
 ```javascript
 var map = L.map('map').setView(new L.LatLng(49.01405, 8.4044), 14);
