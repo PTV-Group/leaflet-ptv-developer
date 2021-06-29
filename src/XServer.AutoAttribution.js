@@ -61,7 +61,7 @@
 		req.end(function (err, resp) {
 			var oldCopyright = layer.options.attribution;
 
-			var newCopyright = '© ' + new Date().getFullYear() + ' ' +
+			var newCopyright = '&copy; ' + new Date().getFullYear() + ' ' +
 				((err || !resp || !resp.body || !resp.body.mapDescription || !resp.body.mapDescription.copyright) ?
 				'PTV AG' :
 				matchCopyrights(resolvedUrl, resp.body.mapDescription.copyright));
