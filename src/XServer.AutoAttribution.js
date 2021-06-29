@@ -61,10 +61,10 @@
 		req.end(function (err, resp) {
 			var oldCopyright = layer.options.attribution;
 
-			var newCopyright = (err || !resp || !resp.body || !resp.body.mapDescription ||
-					!resp.body.mapDescription.copyright) ?
-				'PTV' :
-				matchCopyrights(resolvedUrl, resp.body.mapDescription.copyright);
+			var newCopyright = '© ' + new Date().getFullYear() + ' ' +
+				((err || !resp || !resp.body || !resp.body.mapDescription || !resp.body.mapDescription.copyright) ?
+				'PTV AG' :
+				matchCopyrights(resolvedUrl, resp.body.mapDescription.copyright));
 
 			layer.options.attribution = newCopyright;
 
