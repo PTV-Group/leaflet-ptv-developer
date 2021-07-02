@@ -81,7 +81,7 @@ L.TileLayer.XServer = L.TileLayer.extend({
 	},
 
 	_onMouseMove: function (e) {
-		if (!this._map || this._map.dragging._draggable._moving || this._map._animatingZoom) {
+		if (!this._map || (this._map.dragging._draggable && this._map.dragging._draggable._moving) || this._map._animatingZoom) {
 			return;
 		}
 
