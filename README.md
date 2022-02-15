@@ -59,7 +59,7 @@ It's also possible to split the xMapServer map into separate Leaflet layers. Thi
 
 ```javascript
 var coordinate = L.latLng(49.01405, 8.4044); // KA
-var radius = 250; // m
+var radius = 500; // m
 
 var map = L.map('map').setView(coordinate, 14);
 
