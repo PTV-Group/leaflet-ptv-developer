@@ -74,7 +74,7 @@ var basemapLayer = L.tileLayer(
         pane: 'tilePane'
     }).addTo(map);
 
-var circle = L.circle(coordinate, radius / Math.cos(coordinate.lng / 2 / Math.PI), {
+var circle = L.circle(coordinate, radius, {
     color: 'red',
     fillColor: 'orange',
     fillOpacity: 0.5,
