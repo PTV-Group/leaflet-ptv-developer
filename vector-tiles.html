@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>leaflet-ptv-developer vector tiles example</title>
+    <meta charset="utf-8" />
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+    <link rel="stylesheet"  type="text/css" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/maplibre-gl@2.1.7/dist/maplibre-gl.css">
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+        html,
+        body,
+        #map {
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script type="text/javascript" src="https://unpkg.com/leaflet@1.7.1/dist/leaflet-src.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/maplibre-gl@2.1.7/dist/maplibre-gl.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/@maplibre/maplibre-gl-leaflet@0.0.15/leaflet-maplibre-gl.js"></script>
+    <script type="text/javascript" src="./dist/leaflet-ptv-developer-src.js"></script>
+    <script type="text/javascript" src="./api-key.js"></script>
+    <script>
+        var coordinate = L.latLng(49.01405, 8.4044); // Karlsruhe, Germany
+
+        var map = L.map('map', {
+            fullscreenControl: true
+        }).setView(coordinate, 14);
+
+        var vectorLayer = L.maplibreGL({
+          attribution: '&copy; ' + new Date().getFullYear() + ' PTV AG, HERE',
+          interactive:false,
+          style: 'https://vectormaps-resources.myptv.com/styles/latest/standard.json',
+          transformRequest: (url, resourceType) => {
+            if (resourceType === 'Tile' && url.startsWith('https://api.myptv.com')) {
+              return {
+                url: url + '?apiKey=' + window.apiKey
+              }
+            }
+          }
+        }).addTo(map);
+        
+        map.createPane('clickableTiles');
+        map.getPane('clickableTiles').style.zIndex = 500;
+
+        // insert clickable restrictions layer. 
+        var restrictionsLayer = L.tileLayer.ptvDeveloper(
+            'https://api.myptv.com/rastermaps/v1/data-tiles/{z}/{x}/{y}' +
+            '?apiKey={token}&layers={layers}', {
+                profile: 'silkysand',
+                layers: 'restrictions,',
+                token: window.apiKey,
+                subdomains: '1234',
+                maxZoom: 22,
+                pane: 'clickableTiles'
+            }).addTo(map);
+
+        // insert clickable traffic incident layer. 
+        var trafficIncidentsLayer = L.tileLayer.ptvDeveloper(
+            'https://api.myptv.com/rastermaps/v1/data-tiles/{z}/{x}/{y}' +
+            '?apiKey={token}&layers={layers}', {
+                profile: 'silkysand',
+                layers: 'trafficIncidents',
+                token: window.apiKey,
+                subdomains: '1234',
+                maxZoom: 22,
+                pane: 'clickableTiles'
+            })
+  
+        // add a layer switcher
+        var layers = {
+            "Vector Base Map":  vectorLayer,
+            "Restrictions": restrictionsLayer,
+            "Traffic Incidents": trafficIncidentsLayer,
+        };
+
+        L.control.layers({}, layers, {
+            position: 'bottomleft',
+            autoZIndex: false
+        }).addTo(map);
+    </script>
+</body>
+</html>

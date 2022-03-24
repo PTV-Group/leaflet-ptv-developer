@@ -3,8 +3,8 @@ module.exports = function(grunt) {
 		pkg: grunt.file.readJSON('package.json'),
 		browserify: {
 			control: {
-				src: ['src/TileLayer.XServer.js', 'src/TileLayer.XServer07.js', 'src/XServer.AutoAttribution.js'],
-				dest: 'dist/leaflet-xserver-src.js',
+				src: ['src/TileLayer.PtvDeveloper.js'],
+				dest: 'dist/leaflet-ptv-developer-src.js',
 				options: {
 					transform: [
 						[
@@ -15,7 +15,7 @@ module.exports = function(grunt) {
 						],
 					],
 					browserifyOptions: {
-						standalone: 'leaflet-xserver'
+						standalone: 'leaflet-ptv-developer'
 					}
 				}
 			}
@@ -24,11 +24,11 @@ module.exports = function(grunt) {
 			options: {
 				banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
 				'<%= grunt.template.today("yyyy-mm-dd") %> */\n\n',
-				sourceMap: 'dist/leaflet-xserver-src.js'
+				sourceMap: 'dist/leaflet-ptv-developer-src.js'
 			},
 			build: {
-				src: 'dist/leaflet-xserver-src.js',
-				dest: 'dist/leaflet-xserver.js'
+				src: 'dist/leaflet-ptv-developer-src.js',
+				dest: 'dist/leaflet-ptv-developer.js'
 			}
 		}
 	});
