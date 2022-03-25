@@ -175,8 +175,6 @@ L.TileLayer.PtvDeveloper = L.TileLayer.extend({
 
 	createTile: function (coords, done) {
 		var url = this.getTileUrl(coords);
-
-
 		var tile = document.createElement('img');
 		tile._map = this._map;
 		tile._layers = [];

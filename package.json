@@ -1,6 +1,6 @@
 {
   "name": "leaflet-ptv-developer",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Extended Leaflet classes for PTV Developer",
   "files": [
     "dist"
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/mathias-hess/leaflet-ptv-developer.git"
+    "url": "git://github.com/PTVGroup/leaflet-ptv-developer.git"
   },
   "scripts": {
     "prepublish": "grunt"
@@ -26,9 +26,9 @@
   },
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/mathias-hess/leaflet-ptv-developer/issues"
+    "url": "https://github.com/PTVGroup/leaflet-ptv-developer/issues"
   },
-  "homepage": "https://github.com/mathias-hess/leaflet-ptv-developer",
+  "homepage": "https://github.com/PTVGroup/leaflet-ptv-developer",
   "browserify": {
     "transform": [
       "browserify-shim"

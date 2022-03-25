@@ -27,15 +27,16 @@
     <script type="text/javascript" src="./dist/leaflet-ptv-developer-src.js"></script>
     <script type="text/javascript" src="./api-key.js"></script>
     <script>
-        var coordinate = L.latLng(49.01405, 8.4044); // Karlsruhe, Germany
+        var coordinate = L.latLng(49.012, 8.4044); // Karlsruhe, Germany
 
         var map = L.map('map', {
             fullscreenControl: true
-        }).setView(coordinate, 14);
+        }).setView(coordinate, 17);
 
         var vectorLayer = L.maplibreGL({
-          attribution: '&copy; ' + new Date().getFullYear() + ' PTV AG, HERE',
+          attribution: '&copy; ' + new Date().getFullYear() + ' PTV AG, HERE, TomTom',
           interactive:false,
+          maxZoom: 18,
           style: 'https://vectormaps-resources.myptv.com/styles/latest/standard.json',
           transformRequest: (url, resourceType) => {
             if (resourceType === 'Tile' && url.startsWith('https://api.myptv.com')) {
@@ -53,11 +54,9 @@
         var restrictionsLayer = L.tileLayer.ptvDeveloper(
             'https://api.myptv.com/rastermaps/v1/data-tiles/{z}/{x}/{y}' +
             '?apiKey={token}&layers={layers}', {
-                profile: 'silkysand',
-                layers: 'restrictions,',
+                layers: 'restrictions',
                 token: window.apiKey,
-                subdomains: '1234',
-                maxZoom: 22,
+                maxZoom: 18,
                 pane: 'clickableTiles'
             }).addTo(map);
 
@@ -65,11 +64,9 @@
         var trafficIncidentsLayer = L.tileLayer.ptvDeveloper(
             'https://api.myptv.com/rastermaps/v1/data-tiles/{z}/{x}/{y}' +
             '?apiKey={token}&layers={layers}', {
-                profile: 'silkysand',
                 layers: 'trafficIncidents',
                 token: window.apiKey,
-                subdomains: '1234',
-                maxZoom: 22,
+                maxZoom: 18,
                 pane: 'clickableTiles'
             })
   
@@ -77,7 +74,7 @@
         var layers = {
             "Vector Base Map":  vectorLayer,
             "Restrictions": restrictionsLayer,
-            "Traffic Incidents": trafficIncidentsLayer,
+            "Traffic Incidents": trafficIncidentsLayer
         };
 
         L.control.layers({}, layers, {
