@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/PTVGroup/leaflet-ptv-developer.git"
+    "url": "git://github.com/PTV-Group/leaflet-ptv-developer.git"
   },
   "scripts": {
     "prepublish": "grunt"
@@ -26,9 +26,9 @@
   },
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/PTVGroup/leaflet-ptv-developer/issues"
+    "url": "https://github.com/PTV-Group/leaflet-ptv-developer/issues"
   },
-  "homepage": "https://github.com/PTVGroup/leaflet-ptv-developer",
+  "homepage": "https://github.com/PTV-Group/leaflet-ptv-developer",
   "browserify": {
     "transform": [
       "browserify-shim"
