@@ -74,12 +74,12 @@ var restrictionsLayer = L.tileLayer.ptvDeveloper(
 
 ```
 
-###  Integration as a layered vector map
+####  Integration as a layered vector map
 
 Another possiblity is to mashup a clickable `data-tiles` layer with a [`vector-tiles`](https://developer.myptv.com/Documentation/Vector%20Maps%20API/QuickStart.htm) base map layer. 
 
 ```javascript
-var map = L.map('map').setView(new L.LatLng(49.01405, 8.4044), 14);
+var map = L.map('map').setView(new L.LatLng(49.012, 8.4044), 17);
 
 var vectorLayer = L.maplibreGL({
         attribution: '&copy; ' + new Date().getFullYear() + ' PTV Group, HERE',
