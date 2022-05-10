@@ -1,6 +1,6 @@
 {
   "name": "leaflet-ptv-developer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Extended Leaflet classes for PTV Developer",
   "files": [
     "dist"
@@ -38,15 +38,15 @@
     "leaflet": "global:L"
   },
   "dependencies": {
-    "leaflet": "^1.7.1",
+    "leaflet": "^1.8.0",
     "superagent": "^5.1.0"
   },
   "devDependencies": {
     "browserify": "^17.0.0",
     "browserify-shim": "^3.8.14",
-    "grunt": "^1.4.1",
+    "grunt": "^1.5.2",
     "grunt-browserify": "^6.0.0",
-    "grunt-cli": "^1.2.0",
-    "grunt-contrib-uglify": "^5.0.1"
+    "grunt-cli": "^1.4.3",
+    "grunt-contrib-uglify": "^5.2.1"
   }
 }
