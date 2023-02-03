@@ -147,12 +147,12 @@ L.TileLayer.PtvDeveloper = L.TileLayer.extend({
 		return description.toLowerCase();
 	},
 
-	pixelToLatLng: function (tileKey, point) {
+	pixelToLatLng: function (tileKey, tileSize, tileZ, point) {
 		var earthHalfCircum = Math.PI;
 		var earthCircum = earthHalfCircum * 2.0
-		var arc = earthCircum / Math.pow(2, tileKey.z);
-		var x = -earthHalfCircum + (tileKey.x + (point.x / 256.0)) * arc;
-		var y = earthHalfCircum - (tileKey.y + (point.y / 256.0)) * arc;
+		var arc = earthCircum / Math.pow(2, tileZ);
+		var x = -earthHalfCircum + (tileKey.x + (point.x / tileSize.x)) * arc;
+		var y = earthHalfCircum - (tileKey.y + (point.y / tileSize.y)) * arc;
 
 		return L.latLng(
 			(360 / Math.PI) * (Math.atan(Math.exp(y)) - (Math.PI / 4)),
@@ -170,6 +170,8 @@ L.TileLayer.PtvDeveloper = L.TileLayer.extend({
 	createTile: function (coords, done) {
 		var url = this.getTileUrl(coords);
 		var tile = document.createElement('img');
+		var zoom = this._getZoomForUrl();
+		var size = this.getTileSize();
 		tile._map = this._map;
 		tile._layers = [];
 		tile.request = superagent.get(url);
@@ -196,7 +198,11 @@ L.TileLayer.PtvDeveloper = L.TileLayer.extend({
 
 						for (var i = 0; i < features.length; i++) {
 							var feature = features[i];
-							feature.latLng = this.pixelToLatLng(coords, feature.referencePixelCoordinates);
+							if ('latitude' in feature && 'longitude' in feature) {
+								feature.latLng = L.latLng(feature.latitude, feature.longitude);
+							} else {
+								feature.latLng = this.pixelToLatLng(coords, size, zoom, feature.referencePixelCoordinates);
+							}
 							tile._layers.push(feature);
 						}
 					}
