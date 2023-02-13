@@ -26,6 +26,9 @@
     <script>
         var coordinate = L.latLng(49.012, 8.4044); // Karlsruhe, Germany
 
+        var tileSize = 256; // 512 or 1024 are also possible
+        var zoomOffset = tileSize === 256 ? 0 : tileSize === 512 ? -1 : - 2;
+
         var map = L.map('map', {
             fullscreenControl: true
         }).setView(coordinate, 17);
@@ -33,11 +36,13 @@
         // insert a standard PTV Developer raster base tiles. 
         var basemapLayer = L.tileLayer(
             'https://api.myptv.com/rastermaps/v1/image-tiles/{z}/{x}/{y}' +
-            '?apiKey={token}&layers={layers}', {
+            '?apiKey={token}&layers={layers}&size={tileSize}', {
                 attribution: '&copy; ' + new Date().getFullYear() + ' PTV Group, HERE, TomTom',
                 layers: 'background,transport',
+                tileSize: tileSize,
                 token: window.apiKey,
                 maxZoom: 22,
+                zoomOffset: zoomOffset,
                 pane: 'tilePane'
             }).addTo(map);
 
@@ -48,30 +53,36 @@
         // insert clickable restrictions layer. 
         var restrictionsLayer = L.tileLayer.ptvDeveloper(
             'https://api.myptv.com/rastermaps/v1/data-tiles/{z}/{x}/{y}' +
-            '?apiKey={token}&layers={layers}', {
+            '?apiKey={token}&layers={layers}&size={tileSize}', {
+                tileSize: tileSize,
                 layers: 'restrictions',
                 token: window.apiKey,
                 maxZoom: 22,
+                zoomOffset: zoomOffset,
                 pane: 'clickableTiles'
             }).addTo(map);
 
         // insert clickable traffic incident layer. 
         var trafficIncidentsLayer = L.tileLayer.ptvDeveloper(
             'https://api.myptv.com/rastermaps/v1/data-tiles/{z}/{x}/{y}' +
-            '?apiKey={token}&layers={layers}', {
+            '?apiKey={token}&layers={layers}&size={tileSize}', {
+                tileSize: tileSize,
                 layers: 'trafficIncidents',
                 token: window.apiKey,
                 maxZoom: 22,
+                zoomOffset: zoomOffset,
                 pane: 'clickableTiles'
             })
 
         // insert label layer on the top
         var labelsLayer = L.tileLayer(
             'https://api.myptv.com/rastermaps/v1/image-tiles/{z}/{x}/{y}' +
-            '?apiKey={token}&layers={layers}', {
+            '?apiKey={token}&layers={layers}&size={tileSize}', {
+                tileSize: tileSize,
                 layers: 'labels',
                 token: window.apiKey,
                 maxZoom: 22,
+                zoomOffset: zoomOffset,
                 pane: 'clickableTiles'
             }).addTo(map);
    
