@@ -1,6 +1,6 @@
 {
   "name": "leaflet-ptv-developer",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Extended Leaflet classes for PTV Developer",
   "files": [
     "dist"
